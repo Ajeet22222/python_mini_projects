@@ -1,0 +1,86 @@
+import pandas as pd
+
+df = pd.read_csv("section5_data_automation/matches.csv")
+
+print("=" * 50)
+print("           IPL DATASET ANALYZER")
+print("=" * 50)
+
+print("\nCleaning data...")
+df = df.dropna(subset=["winner"])
+df = df.fillna("Unknown")
+print("Missing values cleaned.")
+
+print("\n" + "=" * 50)
+print("Q1. How many matches were played in total?")
+print("=" * 50)
+total_matches = len(df)
+print(f"Total matches played: {total_matches}")
+
+print("\n" + "=" * 50)
+print("Q2. Which team has won the most matches?")
+print("=" * 50)
+most_wins = df["winner"].value_counts().idxmax()
+win_count = df["winner"].value_counts().max()
+print(f"{most_wins} with {win_count} wins")
+
+print("\n" + "=" * 50)
+print("Q3. How many matches did each team win?")
+print("=" * 50)
+team_wins = df["winner"].value_counts()
+print(team_wins.to_string())
+
+print("\n" + "=" * 50)
+print("Q4. Which city hosted the most IPL matches?")
+print("=" * 50)
+top_city = df["city"].value_counts().idxmax()
+city_count = df["city"].value_counts().max()
+print(f"{top_city} hosted {city_count} matches")
+
+print("\n" + "=" * 50)
+print("Q5. How many matches were won by runs vs wickets?")
+print("=" * 50)
+win_by = df["result"].value_counts()
+print(win_by.to_string())
+
+print("\n" + "=" * 50)
+print("Q6. Which player won the most Player of the Match awards?")
+print("=" * 50)
+top_player = df["player_of_match"].value_counts().idxmax()
+player_count = df["player_of_match"].value_counts().max()
+print(f"{top_player} with {player_count} awards")
+
+print("\n" + "=" * 50)
+print("Q7. How many matches were played each season?")
+print("=" * 50)
+season_matches = df.groupby("season")["id"].count()
+print(season_matches.to_string())
+
+print("\n" + "=" * 50)
+print("Q8. Which team won the most tosses?")
+print("=" * 50)
+toss_winner = df["toss_winner"].value_counts().idxmax()
+toss_count = df["toss_winner"].value_counts().max()
+print(f"{toss_winner} won {toss_count} tosses")
+
+print("\n" + "=" * 50)
+print("Q9. What did teams prefer after winning toss - bat or field?")
+print("=" * 50)
+toss_decision = df["toss_decision"].value_counts()
+print(toss_decision.to_string())
+
+print("\n" + "=" * 50)
+print("Q10. Which venue hosted the most matches?")
+print("=" * 50)
+top_venue = df["venue"].value_counts().idxmax()
+venue_count = df["venue"].value_counts().max()
+print(f"{top_venue} with {venue_count} matches")
+
+print("\n" + "=" * 50)
+print("Saving report to ipl_report.csv...")
+report = df.groupby("winner")["id"].count().reset_index()
+report.columns = ["Team", "Wins"]
+report = report.sort_values("Wins", ascending=False)
+report.to_csv("ipl_report.csv", index=False)
+print("Report saved to ipl_report.csv")
+print("=" * 50)
